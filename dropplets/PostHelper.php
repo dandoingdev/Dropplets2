@@ -14,7 +14,7 @@ class PostHelper {
 			
 			while ( false !== ($entry = readdir ( $handle )) ) {
 				if (substr ( strrchr ( $entry, '.' ), 1 ) == ltrim ( $settings->get ( "file_ext" ), '.' )) {
-					
+                    
 					// Define the post file.
 					$fcontents = file ( $settings->posts_dir . $entry );
 					
@@ -89,7 +89,7 @@ class PostHelper {
 	}
 	function get_posts_for_category($category) {
 		$category = trim ( strtolower ( $category ) );
-		return get_all_posts ( array (
+		return $this->get_all_posts ( array (
 				"category" => $category 
 		) );
 	}

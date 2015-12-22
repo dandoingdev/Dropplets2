@@ -1,11 +1,12 @@
 <?php
 namespace Dropplets;
 use Dropplets\Settings;
+use Dropplets\TemplateHelper;
 
 
 class Tools {
     
-    public $settings = null;
+    private $settings = null;
     
     public function __construct() {
         $this->settings = Settings::instance();
@@ -84,6 +85,8 @@ MARKER;
 
         $header_inject = $this->settings->get('header_inject');
         $footer_inject = $this->settings->get('footer_inject');
+        
+        $templates = new TemplateHelper();
 ?>
 
 <div class="dp-panel-wrapper <?php if($_COOKIE['dp-panel']) { echo($_COOKIE['dp-panel']); } ?>" id="dp-dropplets">
@@ -99,13 +102,19 @@ MARKER;
             </div>
         </div>
         
+        
+        <div class="dp-row">
+            <div class="dp-icon dp-icon-dropplets"></div>
+            <div class="dp-content"><a href="postman">Publish or Update Posts</a></div>
+        </div>
+<!--
         <div class="dp-row">
             <div class="dp-icon dp-icon-dropplets"></div>
             <div class="dp-content">Publish or Update Posts</div>
             <label class="dp-link" for="postfiles"></label>
             <input style="display: none;" type="file" name="postfiles" id="postfiles" class="postfiles" multiple="multiple" />
         </div>
-        
+-->
         <form method="POST" action="./dropplets/save.php">
             <div class="dp-row">
                 <div class="dp-icon dp-icon-settings"></div>
@@ -242,7 +251,7 @@ MARKER;
         
         <div class="dp-sub-panel" id="dp-templates">
             <div class="dp-row dp-templates">
-                <?php get_installed_templates('all'); ?>
+                <?php $templates->get_installed_templates('all'); ?>
             </div>
         </div>
         
@@ -250,12 +259,12 @@ MARKER;
             <div class="dp-icon dp-icon-templates"></div>
             <div class="dp-content">Featured Templates</div>
             <a class="dp-link dp-toggle" href="#dp-featured"></a>
-            <span class="dp-number dp-number-dark"><?php count_premium_templates('featured'); ?></span>
+            <span class="dp-number dp-number-dark"><?php $templates->count_premium_templates('featured'); ?></span>
         </div>
         
         <div class="dp-sub-panel" id="dp-featured">
             <div class="dp-row dp-templates">
-                <?php get_premium_templates('featured'); ?>
+                <?php $templates->get_premium_templates('featured'); ?>
             </div>
         </div>
         
@@ -263,12 +272,12 @@ MARKER;
             <div class="dp-icon dp-icon-templates"></div>
             <div class="dp-content">Popular Templates</div>
             <a class="dp-link dp-toggle" href="#dp-popular"></a>        
-            <span class="dp-number dp-number-dark"><?php count_premium_templates('popular'); ?></span>
+            <span class="dp-number dp-number-dark"><?php $templates->count_premium_templates('popular'); ?></span>
         </div>
         
         <div class="dp-sub-panel" id="dp-popular">
             <div class="dp-row dp-templates">
-                <?php get_premium_templates('popular'); ?>
+                <?php $templates->get_premium_templates('popular'); ?>
             </div>
         </div>
         
@@ -276,12 +285,12 @@ MARKER;
             <div class="dp-icon dp-icon-templates"></div>
             <div class="dp-content">All Templates</div>
             <a class="dp-link dp-toggle" href="#dp-all"></a>
-            <span class="dp-number dp-number-dark"><?php count_premium_templates('all'); ?></span>
+            <span class="dp-number dp-number-dark"><?php $templates->count_premium_templates('all'); ?></span>
         </div>
         
         <div class="dp-sub-panel" id="dp-all">
             <div class="dp-row dp-templates">
-                <?php get_premium_templates('all'); ?>
+                <?php $templates->get_premium_templates('all'); ?>
             </div>
         </div>
         

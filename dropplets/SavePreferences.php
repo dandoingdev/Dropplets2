@@ -6,11 +6,11 @@ class SavePreferences {
 	
 	// File locations.
 	private $settings_file = "./config.ini";
-	private $htaccess_file = "./.htaccess";
-	private $dir = '';
+    
 	private function settings_format($name, $value) {
 		return sprintf ( "%s = \"%s\"", $name, $value );
 	}
+    
 	public function save() {
 		if ($_POST ["submit"] == "submit" && (! file_exists ( $this->settings_file ) || isset ( $_SESSION ['user'] ))) {
 			
@@ -55,6 +55,10 @@ class SavePreferences {
 			if (isset ( $_POST ["template"] )) {
 				$template = $_POST ["template"];
 			}
+            
+			if (isset ( $_POST ["file_ext"] )) {
+				$file_ext = $_POST ["file_ext"];
+			}
 			
 			// There must always be a $password, but it can be changed optionally in the
 			// settings, so you might not always get it in $_POST.
@@ -78,9 +82,6 @@ class SavePreferences {
 				$footer_inject = addslashes ( $_POST ["footer_inject"] );
 			}
 			
-			// Get subdirectory
-			$this->dir .= str_replace ( 'dropplets/save.php', '', $_SERVER ["REQUEST_URI"] );
-			
 			// Output submitted setup values.
 			$config [] = $this->settings_format ( "blog_email", $blog_email );
 			$config [] = $this->settings_format ( "blog_twitter", $blog_twitter );
@@ -93,28 +94,10 @@ class SavePreferences {
 			$config [] = $this->settings_format ( "header_inject", $header_inject );
 			$config [] = $this->settings_format ( "footer_inject", $footer_inject );
 			$config [] = $this->settings_format ( "template", $template );
+			$config [] = $this->settings_format ( "file_ext", $file_ext );
 			
 			// Create the settings file.
 			file_put_contents ( $this->settings_file, implode ( "\n", $config ) );
-			
-			// Generate the .htaccess file on initial setup only.
-			if (! file_exists ( $this->htaccess_file )) {
-				
-				// Parameters for the htaccess file.
-				$htaccess [] = "# Pretty Permalinks";
-				$htaccess [] = "RewriteRule ^(images)($|/) - [L]";
-				$htaccess [] = "RewriteCond %{REQUEST_URI} !^action=logout [NC]";
-				$htaccess [] = "RewriteCond %{REQUEST_URI} !^action=login [NC]";
-				$htaccess [] = "Options +FollowSymLinks -MultiViews";
-				$htaccess [] = "RewriteEngine on";
-				$htaccess [] = "RewriteBase " . $this->dir;
-				$htaccess [] = "RewriteCond %{REQUEST_URI} !index\.php";
-				$htaccess [] = "RewriteCond %{REQUEST_FILENAME} !-f";
-				$htaccess [] = "RewriteRule ^(.*)$ index.php?filename=$1 [NC,QSA,L]";
-				
-				// Generate the .htaccess file.
-				file_put_contents ( $this->htaccess_file, implode ( "\n", $htaccess ) );
-			}
 			
 			// Redirect
 			header ( "Location: " . $blog_url );
