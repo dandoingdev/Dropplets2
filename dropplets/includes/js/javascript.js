@@ -74,34 +74,34 @@ if ($.fn.liteUploader) {
         var loading = false;
         var no_more_posts = false;
         $(function() {
-            function load_next_page() {
-                $.ajax({
-                    url: "index.php?page=" + next_page,
-                    beforeSend: function () {
-                        $('body').append('<article class="loading-frame"><div class="row"><div class="one-quarter meta"></div><div class="three-quarters"><img src="./templates//loading.gif" alt="Loading"></div></div></article>');
-                        $("body").animate({ scrollTop: $("body").scrollTop() + 250 }, 1000);
-                    },
-                    success: function (res) {
-                        next_page++;
-                        var result = $.parseHTML(res);
-                        var articles = $(result).filter(function() {
-                            return $(this).is('article');
-                        });
-                        if (articles.length < 2) {  //There's always one default article, so we should check if  < 2
-                            $('.loading-frame').html('You\'ve reached the end of this list.');
-                            no_more_posts = true;
-                        }  else {
-                            $('.loading-frame').remove();
-                            $('body').append(articles);
-                        }
-                        loading = false;
-                    },
-                    error: function() {
-                        $('.loading-frame').html('An error occurred while loading posts.');
-                        //keep loading equal to false to avoid multiple loads. An error will require a manual refresh
-                    }
-                });
-            }
+//            function load_next_page() {
+//                $.ajax({
+//                    url: "index.php?page=" + next_page,
+//                    beforeSend: function () {
+//                        $('body').append('<article class="loading-frame"><div class="row"><div class="one-quarter meta"></div><div class="three-quarters"><img src="./templates//loading.gif" alt="Loading"></div></div></article>');
+//                        $("body").animate({ scrollTop: $("body").scrollTop() + 250 }, 1000);
+//                    },
+//                    success: function (res) {
+//                        next_page++;
+//                        var result = $.parseHTML(res);
+//                        var articles = $(result).filter(function() {
+//                            return $(this).is('article');
+//                        });
+//                        if (articles.length < 2) {  //There's always one default article, so we should check if  < 2
+//                            $('.loading-frame').html('You\'ve reached the end of this list.');
+//                            no_more_posts = true;
+//                        }  else {
+//                            $('.loading-frame').remove();
+//                            $('body').append(articles);
+//                        }
+//                        loading = false;
+//                    },
+//                    error: function() {
+//                        $('.loading-frame').html('An error occurred while loading posts.');
+//                        //keep loading equal to false to avoid multiple loads. An error will require a manual refresh
+//                    }
+//                });
+//            }
 
             $(window).scroll(function() {
                 var when_to_load = $(window).scrollTop() * 0.32;

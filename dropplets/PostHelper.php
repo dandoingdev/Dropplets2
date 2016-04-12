@@ -18,6 +18,8 @@ class PostHelper {
 					// Define the post file.
 					$fcontents = file ( $settings->posts_dir . $entry );
 					
+                    if (count($fcontents) < 6) continue; // Ensure file meets parse requirements
+                    
 					// Define the post title.
 					$post_title = \Michelf\Markdown::defaultTransform ( $fcontents [0] );
 					
