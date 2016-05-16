@@ -53,11 +53,9 @@ function get_installed_templates() {
 
 function get_premium_templates($type = 'all', $target = 'blank') {
     
-    $templates = simplexml_load_file('http://dropplets.com/templates-'. $type .'.xml');
+    $templates = @simplexml_load_file('http://dropplets.com/templates-'. $type .'.xml');
     
-    if($templates===FALSE) {
-        // Feed not available.
-    } else {
+    if(!$templates===FALSE) {
         foreach ($templates as $template):
             
             // Define some variables
@@ -78,15 +76,13 @@ function get_premium_templates($type = 'all', $target = 'blank') {
 
 function count_premium_templates($type = 'all') {
 
-    $templates = simplexml_load_file('http://dropplets.com/templates-'. $type .'.xml');
-
-    if($templates===FALSE) {
-        // Feed not available.
-    } else {
-        $templates = simplexml_load_file('http://dropplets.com/templates-'. $type .'.xml');
+    $templates = @simplexml_load_file("http://dropplets.com/templates-" . $type . ".xml");
+    $templates_count = 0;
+    
+    if(!$templates===FALSE) {
         $templates_count = $templates->children();
-        echo count($templates_count);
     }
+    echo count($templates_count);
 }
     
 }

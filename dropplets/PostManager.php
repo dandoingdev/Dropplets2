@@ -43,15 +43,20 @@ class PostManager {
         $path = null;
         $timestamp = null;
         $dirname = $this->settings->posts_dir;
-        $dir = new \DirectoryIterator($dirname);
+        $dir = new \RecursiveDirectoryIterator($dirname);
+        $dir->setFlags(\RecursiveDirectoryIterator::SKIP_DOTS);
 
 		ob_start ();
         ?>
         <div class="row">
-            <table>
+            <table class="post-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Date created</th>
+                </tr>
+                
         <?php    
             foreach ($dir as $fileinfo) {
-                if (!$fileinfo->isDot()) {
                     if ($fileinfo->getMTime() > $timestamp) {
                         // current file has been modified more recently
                         // than any other file we've checked until now
@@ -60,13 +65,36 @@ class PostManager {
                         $created = $fileinfo->getCTime();
                         $linkUrl = preg_replace('/\\.[^.\\s]{1,4}$/', '', $path);
 
-                        echo "<tr><td><a href='?action=edit&post=".$linkUrl."'>".$path."</a> - ".date("F d Y H:i:s.", $created)."</td></tr>";
+                        echo "<tr><td><a href='?action=edit&post=".$linkUrl."'>".$path."</a></td>";
+                        echo "<td>".date("F d Y H:i:s.", $created)."</td></tr>";
                     }
-                }
             }
         ?>
             </table>
         </div>
+
+<style>
+    .post-table {
+        width: 80%;
+        margin: 50px auto;
+        text-align: center;
+        border: solid 1px #ddd;
+    }
+    .post-table th {
+        font-weight: bold;
+        
+    }
+    .post-table th,
+    .post-table td {
+        text-align: left;
+        padding: 5px;
+        border: solid 1px #ddd;
+    }
+
+</style>
+
+
+
         <?php 
 		return ob_get_clean ();
     }
